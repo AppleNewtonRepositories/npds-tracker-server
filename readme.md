@@ -379,6 +379,7 @@ Set to 'true' to allow sharing, set to anything else to disallow sharing.
 shareServer = unna.org 3680
 shareServer = messagepad.no-ip.org 3680
 shareServer = tracker.newtonrulez.com 3680
+shareServer = tracker.applenewton.co.uk 3680
 ```
 
 Specifies servers to obtain SHARE'd records from.
@@ -572,6 +573,10 @@ The [HTML page template](#pagetemplate) can be customized using the following ps
 `<version/>` - The current version of the tracker software
 
 
+## css Template: Manual modification for WorldMap Picture
++ It is necessary to manually change the name of the image (WorldMap) of the file template.css (line 260) according to your location. Currently 4 images WorldMap have been created: WorldMap-AppleNewton.gif (for AppleNewton), WorldMap-newtonrulez.gif (for NewtonRulez), and WorldMap.gif (for MessagePad.net)
+
+
 
 ## Licensing
 
@@ -580,6 +585,9 @@ Coming soon.
 
 
 ## Version History
+
+### 0.1.39 Release 2 (january 2017)
++ [SP] New 2017 html/css template for NPDS Tracker
 
 ### 0.1.39 - TBD
 + [PPG] NPDS Tracker now supports serving image files. (Support for .gif and .ico image files)

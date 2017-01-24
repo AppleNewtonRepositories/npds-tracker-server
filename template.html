@@ -1,43 +1,86 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
 	<title><tracker-name/> NPDS Tracker Server</title>
-    <meta charset="utf-8" />
-    <meta-refresh/>
-    <stylesheet/>
+	<meta charset="UTF-8">
+	<meta-refresh/>
+	<meta name="description" content="NPDS TRACKER Network for Apple Newton NPDS WebServer" />
+	<link href="template.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" href="images/favicon.gif" type="image/gif">
+	
 </head>
-<body><div class="page">
-	<header>
-    <h1><a href="<tracker-host/>"><tracker-name/></a> NPDS Tracker Server</h1>
-    </header>
-        <section>
-            <article>
-            <p>There <server-verb/> <server-counter/> Newton <server-noun/> currently registered with this tracker:</p>
-            <servers/>
-            <p class="right"><last-validation/><br />
-            Servers are validated every <validate-time/> <validate-time-noun/>.<br /> This page has been viewed <hit-counter/> <hit-counter-noun/> since the tracker was started.    
-            <br /> <b>NPDS Tracker Server Version:</b> <version/></p>
-            </article>
-        </section>
-		<p><strong>Shared Trackers:</strong><br />
-           <nav>
-           <server-shares/>
-           </nav>            
-        <strong>Newton Personal Data Sharing:</strong><br />
-           <nav>
-           <ul class="links">
-           <li><a href="http://npds.free.fr/">About</a></li>
-           <li><a href="http://twitter.com/npds/">Twitter</a></li>
-           <li><a href="https://github.com/splorp/npds-tracker-server/">GitHub</a></li>
-           </ul>
-           </nav>
-   <p>Valid<a href="http://validator.w3.org/check?uri=<url/>"><img src="images/HTML-5-Valid-icon.gif" alt="W3C HTML 5" width="41" height="14" border="0" ></a></p>
-<footer>
-	<center><br />
-	<p class="copy1">NPDS Copyright &#169; Matt Vaughn, Paul Guyot, Victor Rehorst, Grant Hutchinson, Josh Burker, and al.<br />
-   <font color="#888888">This Newton NPDS Tracker Server is offered by <tracker-name/> - Design &#169; 2014-2015 S. Pilet. </font></p>
-   </center>
-</footer>
+<body>
+    
+<div id="global">
+	<div id="header">
+    <img src="images/NPDS-Tracker-Top.gif" width="860" height="82" alt="NPDS Tracker Head Background">
+    
+    	<div id="menu">
+
+    <a href="#"><img src="images/Tab-Newton.gif" alt="Online Newton"></a><a href="#shared"><img src="images/Tab-Shared.gif" alt="Shared" onmouseover="javascript:this.src='images/Tab-Shared-on.gif';" onmouseout="javascript:this.src='images/Tab-Shared.gif';" /></a><a href="#about"><img src="images/Tab-About.gif" alt="About NPDS" onmouseover="javascript:this.src='images/Tab-About-on.gif';" onmouseout="javascript:this.src='images/Tab-About.gif';" /></a><a href="http://twitter.com/npds/" target="_blank"><img src="images/Tab-Twitter.gif" alt="NPDS on Twitter" onmouseover="javascript:this.src='images/Tab-Twitter-on.gif';" onmouseout="javascript:this.src='images/Tab-Twitter.gif';" /></a><a href="https://github.com/splorp/npds-tracker-server/" target="_blank"><img src="images/Tab-GitHub.gif" alt="Tracker Server on GitHub" onmouseover="javascript:this.src='images/Tab-Git-on.gif';" onmouseout="javascript:this.src='images/Tab-GitHub.gif';" /></a><a href="http://npds.free.fr/list/" target="_blank"><img src="images/Tab-List.gif" alt="NPDS Mailing List" onmouseover="javascript:this.src='images/Tab-List-on.gif';" onmouseout="javascript:this.src='images/Tab-List.gif';" /></a>
+
+		</div>
+	</div>	    
+			
+	<div id="content"><h1>Welcome on <a href="<tracker-host/>"><tracker-name/></a> NPDS Tracker Server</h1><p>There <server-verb/> <server-counter/> Newton <server-noun/> currently registered with this tracker:</p>
+
+		<section>
+			<article>
+        	<servers/>
+
+  		<p class="right"><strong>&nbsp;Tracker infos:</strong><br /><last-validation/><br />Servers are validated every <validate-time/> <validate-time-noun/>.<br /> This page has been viewed <hit-counter/> <hit-counter-noun/> since the tracker was started.<br /><strong>NPDS Tracker Server Version: </strong><version/>.</p>
+			<br />
+			</article>
+	</section>
+	
+	<a id="shared"></a>
+      <img src="images/separator.gif" width="860" height="60" alt=""/>  
+    <p><h1>Shared Trackers:</h1>
+    
+	<nav>
+        <server-shares/>
+	</nav>
+ 
+<div id="worldmap" >
+	<dl id="npdsMap">
+                <dt id="una">1. UNNA.ORG</dt>
+                <dd id="unnaDef"><a href="http://unna.org:3680/"><span>TRACKER: unna.org<br />Operated by Morgan Aldridge<br>COUNTRY : USA / CA</span></a></dd>
+                <dt id="geremia">2. NewtonRulez.com</dt>
+                <dd id="geremiaDef"><a href="http://tracker.newtonrulez.com:3680/"><span>tracker.newtonrulez.com<br />Operated by Pete Geremia<br>COUNTRY : USA / MA</span></a></dd>
+                <dt id="applenoewton">3. Applenewton</dt>
+                <dd id="applenewtonDef"><a href="http://tracker.applenewton.co.uk:3680/"><span>tracker.applenewton.co.uk<br />Operated by Pawel Piotrowski<br>COUNTRY : Scotland</span></a></dd>
+                <dt id="messagepad">3. Applenewton</dt>
+  <dd id="messagepadDef"><a href="http://messagepad.no-ip.org:3680/"><span>TRACKER: messagepad.net<br />Operated by Sylvain Pilet<br>COUNTRY : France</span></a></dd>
+            </dl>
+</div>
+    
+    <br />
+  <p><img src="images/separator.gif" width="860" height="60" alt=""/> </p><br />  
+  <p class="pict"><img src="images/Newton-NPDS.gif" width="125" height="226" alt=""></p>
+    <a id="about"></a>
+   <h1>About NPDS:</h1>
+<h2>The friendly web server you can hold in your hand.</h2>
+<p>NPDS is a web server and associated support modules for Newton devices running Newton OS 2.x. It was originally a project started by Matt Vaughn based on sample code by Ray Rischpater. Other contributors are Adam Tow, Victor Rehorst and Paul Guyot for this particular branch of the code. There is also a Unicode-based branch of NPDS that was being developed by Yoichi Takezawa. The NPDS site is currently preened and noodled by Grant Hutchinson. Special thanks to the NPDS webmasters who have helped by testing and sending in their bug reports and suggestions.</p><p>Information and archives for the NPDS mailing list are also available.</p><br />
+ <h3>NPDS component modules:</h3>Grab the latest versions of the NPDS modules for this branch of development.<img src="images/NPDS-Modules.gif" width="860" height="75" alt="NPDS-List-Modules">
+ <h3>More informations on npds.free.fr:</h3>
+<ul>
+	<li><a href="http://npds.free.fr/" target="_blank">Home</a></li>
+	<li><a href="http://npds.free.fr/docs/" target="_blank">Documentation</a></li>
+	<li><a href="http://npds.free.fr/software/" target="_blank">Software</a></li>
+	<li><a href="http://npds.free.fr/trackers/" target="_blank">Trackers</a></li>
+	<li><a href="http://npds.free.fr/list/" target="_blank">Mailing List</a></li>
+	<li><a href="http://twitter.com/npds" target="_blank">Twitter</a></li>
+</ul>
+
+<br /><img src="images/separator.gif" width="860" height="60" alt=""/><br /><br />
+
+<p><strong>NPDS Tracker Server Version: </strong><version/><p>Valid<a href="http://validator.w3.org/check?uri=http://messagepad.no-ip.org:3680"><img src="images/HTML-5-Valid-icon.gif" alt="W3C HTML 5" width="41" height="14"><img src="images/CSS-3-Valid-icon.gif" width="34" height="14" alt="W3C CSS3"></a></p><br />
+      
+<div id="footer">
+	<a href="http://npds.free.fr/" target="_blank">NPDS</a> Copyright &copy; Matt Vaughn, Paul Guyot, Victor Rehorst, Grant Hutchinson, Josh Burker, &amp; all.<br>
+This Newton NPDS Tracker Server is offered by <tracker-name/> | Design Copyright &copy; 2006-2017 Sylvain Pilet.
+</div>
+</div>
+</div> <!-- fin de Global -->
 </body>
 </html>
