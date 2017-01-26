@@ -113,15 +113,11 @@ a:active {color:#444;}
 
 
 table {
-	border-collapse: collapse;
-	border: 1px solid; 
-	border-color: #333;
 	background-color: #555555;
     background-image: url(images/Icon-Up-World.gif);
     background-repeat: no-repeat;
 	background-position: right top;
 	width: 860px;
-	
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 	-khtml-border-radius: 6px;
@@ -209,7 +205,6 @@ ul li:last-child:after {
     background-position: right;
 	}
 
-
 tr {
     height: 30px;
     }
@@ -220,6 +215,22 @@ tr {
 	color: #fff;
 	line-height:20px;
 	} 
+
+tr:first-child th, tr:first-child td {
+	border-top-width: 3px;
+	}
+
+tr:last-child th, tr:last-child td {
+	border-bottom-width: 3px;
+	}
+
+th:first-child, td:first-child {
+	border-left-width: 3px;
+	}
+
+th:last-child, td:last-child {
+	border-right-width: 3px;
+	}
 
 tr:first-child th:first-child {
 	-webkit-border-top-left-radius: 5px;
