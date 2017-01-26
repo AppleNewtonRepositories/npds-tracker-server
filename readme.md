@@ -574,7 +574,7 @@ The [HTML page template](#pagetemplate) can be customized using the following ps
 
 
 ## css Template: Manual modification for WorldMap Picture
-+ It is necessary to manually change the name of the image (WorldMap) of the file template.css (line 260) according to your location. Currently 4 images WorldMap have been created: WorldMap-AppleNewton.gif (for AppleNewton), WorldMap-newtonrulez.gif (for NewtonRulez), and WorldMap.gif (for MessagePad.net)
++ It is necessary to manually change the name of the image (WorldMap) of the file template.css (line 271) according to your location. Currently 4 images WorldMap have been created: WorldMap-AppleNewton.gif (for AppleNewton), WorldMap-newtonrulez.gif (for NewtonRulez), and WorldMap.gif (for MessagePad.net)
 
 
 
