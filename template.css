@@ -172,18 +172,18 @@ ul li:last-child:after {
 	}
 
 .up {
-	background-color: #f0fff0; 
+	background-color: #dcf8d8; 
     }
 
 .up td:first-child {
-	background-color: #f0fff0; 
+	background-color: #dcf8d8; 
 	background-image: url(images/On-Up.gif);
 	background-repeat: no-repeat;
 	background-position: left;
 	}
 
 .up td:last-child {
- 	background-color: #f0fff0; 
+ 	background-color: #dcf8d8; 
     background-image: url(images/Icon-Up.gif);
     background-repeat: no-repeat;
     background-position: right;
