@@ -586,7 +586,7 @@ Coming soon.
 
 ## Version History
 
-### 0.1.39 Release 2 (january 2017)
+### 0.1.39 Release 2 (January 2017)
 + [SP] New 2017 html/css template for NPDS Tracker
 
 ### 0.1.39 - TBD
