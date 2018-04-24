@@ -27,11 +27,11 @@ public class npdstracker
 
 	// Version Information
 	public static final String serverdesc = "NPDS Tracker Server for Java";
-	public static final int majorversion = 0;
-	public static final int minorversion = 1;
-	public static final int build = 39;
+	public static final int majorversion = 2;
+	public static final int minorversion = 0;
+	public static final int build = 1;
 	public static final int protocolversion = 1;
-	public static final String versionStr = majorversion + "." + minorversion + "." + build + " R2";
+	public static final String versionStr = majorversion + "." + minorversion + "." + build;
 	public static final String kServerStr = "Victor Rehorst's NPDS Tracker Server " + versionStr;
 	public static final String kUserAgentStr = "Mozilla/5.0 (compatible; " + kServerStr + "; Java)";
 
@@ -463,10 +463,9 @@ public class npdstracker
 					while (true) {
 						try {
 							garbage = st.nextToken();
-							int thePort = Integer.parseInt(garbage);
-
 							// Add that port to the list.
-							kPort.addElement(new Integer(thePort));
+                                                        Integer thePort = Integer.valueOf(garbage);
+							kPort.addElement(thePort);
 							logMessage("Port found: " + thePort);
 						} catch (NoSuchElementException aNSEE) {
 							break;
@@ -678,7 +677,7 @@ public class npdstracker
 		{
 			// Default values for options.
 			kPort = new Vector<Integer>();
-			kPort.addElement(new Integer(DEFAULT_PORT));
+			kPort.addElement(Integer.valueOf(DEFAULT_PORT));
 			
 			if (!(tempoptionsfile.equals("")))
 				ParseOptionsFile(tempoptionsfile);

@@ -15,7 +15,7 @@ Looking for support? Join the [NPDS mailing list](http://npds.free.fr/list/).
 
 ### Java 1.3 or later
 
-The current release of the NPDS Tracker Server has been tested with Java SE (Standard Edition) versions 1.4, 5, 6 and 8. It will also work with versions earlier than 1.3, but it is not recommended. See the [Basic Set Up](#basic-set-up) section for more information.
+The current release of the NPDS Tracker Server has been tested with Java SE (Standard Edition) versions 1.4, 5, 6, 8  and 10. It will also work with versions earlier than 1.3, but it is not recommended. See the [Basic Set Up](#basic-set-up) section for more information.
 
 The Java SE runtime can be downloaded from [Oracle](http://www.oracle.com/technetwork/java/javase/).
 
@@ -585,6 +585,11 @@ Coming soon.
 
 
 ## Version History
+
+### 2.0.1 (April 2018)
++ [PPG] Fix compile errors for Java 10
++ [SP] Update map images and CSS
+
 
 ### 0.1.39 Release 2 (January 2017)
 + [SP] New 2017 html/css template for NPDS Tracker
