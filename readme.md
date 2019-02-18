@@ -15,7 +15,7 @@ Looking for support? Join the [NPDS mailing list](http://npds.free.fr/list/).
 
 ### Java 1.3 or later
 
-The current release of the NPDS Tracker Server has been tested with Java SE (Standard Edition) versions 1.4, 5, 6 and 8. It will also work with versions earlier than 1.3, but it is not recommended. See the [Basic Set Up](#basic-set-up) section for more information.
+The current release of the NPDS Tracker Server has been tested with Java SE (Standard Edition) versions 1.4, 5, 6, 8  and 10. It will also work with versions earlier than 1.3, but it is not recommended. See the [Basic Set Up](#basic-set-up) section for more information.
 
 The Java SE runtime can be downloaded from [Oracle](http://www.oracle.com/technetwork/java/javase/).
 
@@ -576,7 +576,8 @@ The [HTML page template](#pagetemplate) can be customized using the following ps
 ## css Template: Manual modification for WorldMap Picture
 + It is necessary to manually change the name of the image (WorldMap) of the file template.css (line 271) according to your location. Currently 4 images WorldMap have been created: WorldMap-AppleNewton.gif (for AppleNewton), WorldMap-newtonrulez.gif (for NewtonRulez), and WorldMap.gif (for MessagePad.net)
 
-
+## NPDS Status File
++ If you would like to present the current status of the NPDS server in a text terminal you can use the "statusFile" option.  When this is set to true in the npdstracker.ini file it will write a file to the default directory called "npdsstatus.txt".  This is not a log file but will contain the current status of the tracker server.  An option to this is "statusCompact" which will choose a full or compact text display.  The compact display restricts the width to less than 60 columns.
 
 ## Licensing
 
@@ -585,6 +586,14 @@ Coming soon.
 
 
 ## Version History
+
+### 2.0.1 (April 2018)
++ [PPG] Add new NPDS Status file feature
+
+### 2.0.0 (April 2018)
++ [PPG] Fix compile errors for Java 10
++ [SP] Update map images and CSS from Sylvain Pilet
+
 
 ### 0.1.39 Release 2 (January 2017)
 + [SP] New 2017 html/css template for NPDS Tracker

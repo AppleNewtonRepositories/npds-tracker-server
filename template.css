@@ -172,18 +172,18 @@ ul li:last-child:after {
 	}
 
 .up {
-	background-color: #dcf8d8; 
+	background-color: #f0fff0; 
     }
 
 .up td:first-child {
-	background-color: #dcf8d8; 
+	background-color: #f0fff0; 
 	background-image: url(images/On-Up.gif);
 	background-repeat: no-repeat;
 	background-position: left;
 	}
 
 .up td:last-child {
- 	background-color: #dcf8d8; 
+ 	background-color: #f0fff0; 
     background-image: url(images/Icon-Up.gif);
     background-repeat: no-repeat;
     background-position: right;
@@ -209,6 +209,7 @@ tr {
     height: 30px;
     }
  th {	
+	/* background-color: #222; */
 	border-left-width: 0;
 	border-right-width: 0;
 	color: #fff;

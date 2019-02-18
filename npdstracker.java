@@ -1,21 +1,38 @@
 // NPDS Tracker Server
 // Developed by Victor Rehorst and Paul Guyot
-// Additional contributions by Morgan Aldridge, Grant Hutchinson, Ron Parker, and Manuel Probsthain
+// Additional contributions by Morgan Aldridge, Grant Hutchinson, Ron Parker, Manuel Probsthain, Sylvain Pilet and Peter Geremia
 // Many thanks to Matt Vaughn for developing NPDS in the first place
 
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.TimeZone;
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.text.*;
-
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-
 
 public class npdstracker
 {
@@ -27,11 +44,11 @@ public class npdstracker
 
 	// Version Information
 	public static final String serverdesc = "NPDS Tracker Server for Java";
-	public static final int majorversion = 0;
-	public static final int minorversion = 1;
-	public static final int build = 39;
+	public static final int majorversion = 2;
+	public static final int minorversion = 0;
+	public static final int build = 1;
 	public static final int protocolversion = 1;
-	public static final String versionStr = majorversion + "." + minorversion + "." + build + " R2";
+	public static final String versionStr = majorversion + "." + minorversion + "." + build;
 	public static final String kServerStr = "Victor Rehorst's NPDS Tracker Server " + versionStr;
 	public static final String kUserAgentStr = "Mozilla/5.0 (compatible; " + kServerStr + "; Java)";
 
@@ -48,6 +65,7 @@ public class npdstracker
 	public static final int kTimeout = 20000;			// 20000 = 20 seconds in milliseconds
 	public static final String defaultOptionsFile = "npdstracker.ini";
 	public static final String defaultCmdFile = "npdscmd.txt";
+	public static final String defaultStatusFile = "npdsstatus.txt";
 
 	// Messages
 	public static final String kRTFMStr = " Please check out the protocol before telnetting to the tracker (http://npds.free.fr/)";
@@ -74,6 +92,8 @@ public class npdstracker
 	public static Vector<Integer> kPort;
 	public static String logFile = "";
 	public static boolean logVerbose = true;
+	public static boolean statusFile = false;
+	public static boolean statusCompact = false;
 	public static String templateFile = "";
 	public static String stylesheetFile = "";
 	public static String imageDir = "";
@@ -109,6 +129,13 @@ public class npdstracker
 	{
 		mRFCGMTFormatter = new SimpleDateFormat("EEE',' d-MMM-yyyy HH:mm:ss 'GMT'", Locale.US);
 		mRFCGMTFormatter.setTimeZone(TimeZone.getTimeZone("Africa/Casablanca"));
+	}
+	
+	private static DateFormat mGMTCompactFormatter;
+	static
+	{
+		mGMTCompactFormatter = new SimpleDateFormat("d-MMM-yyyy HH:mm:ss 'GMT'", Locale.US);
+		mGMTCompactFormatter.setTimeZone(TimeZone.getTimeZone("Africa/Casablanca"));
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -463,10 +490,9 @@ public class npdstracker
 					while (true) {
 						try {
 							garbage = st.nextToken();
-							int thePort = Integer.parseInt(garbage);
-
 							// Add that port to the list.
-							kPort.addElement(new Integer(thePort));
+                                                        Integer thePort = Integer.valueOf(garbage);
+							kPort.addElement(thePort);
 							logMessage("Port found: " + thePort);
 						} catch (NoSuchElementException aNSEE) {
 							break;
@@ -534,6 +560,22 @@ public class npdstracker
 					logMessage("Error reading npdstracker.ini on line " + linenumber);
 				else
 					logVerbose = Boolean.valueOf(st.nextToken()).booleanValue();
+			}
+			else if (tempoption.startsWith("statusFile"))
+			{
+				garbage = st.nextToken();
+				if (!(garbage.equals("=")))
+					logMessage("Error reading npdstracker.ini on line " + linenumber);
+				else
+					statusFile = Boolean.valueOf(st.nextToken()).booleanValue();
+			}
+			else if (tempoption.startsWith("statusCompact"))
+			{
+				garbage = st.nextToken();
+				if (!(garbage.equals("=")))
+					logMessage("Error reading npdstracker.ini on line " + linenumber);
+				else
+					statusCompact = Boolean.valueOf(st.nextToken()).booleanValue();
 			}
 			else if (tempoption.startsWith("pageTemplate"))
 			{
@@ -678,7 +720,7 @@ public class npdstracker
 		{
 			// Default values for options.
 			kPort = new Vector<Integer>();
-			kPort.addElement(new Integer(DEFAULT_PORT));
+			kPort.addElement(Integer.valueOf(DEFAULT_PORT));
 			
 			if (!(tempoptionsfile.equals("")))
 				ParseOptionsFile(tempoptionsfile);
@@ -866,6 +908,7 @@ public class npdstracker
 					throw new TQueryException ( kAlreadyRegisteredStr );
 				} // if ((QueryRecord(hname) == -1)) ... else 
 				saveServers();
+				writeStatusFile();
 			}
 			else if (theCommand.equals("REGDN"))
 			{
@@ -908,6 +951,7 @@ public class npdstracker
 					logMessage(mHostInfoVector.size() + " hosts now in the list");
 				} // if (tempindex == -1)
 				saveServers();
+				writeStatusFile();
 			}
 			else if (theCommand.equals("QUERY"))
 			{
@@ -1757,10 +1801,145 @@ public class npdstracker
 				
 		mLastValidation = ReturnRFCTime(new Date());
 		saveServers();
+		writeStatusFile();
 		mValidationInProgress -= 1;
 		logMessage("Ending validation of records");
 	}
 
+	// ====================================================================	//
+	// String getStatusString( int ) [static, private]
+	// ====================================================================	//
+	// Checks the registered Newtons.
+		
+	private static String getStatusString( int status, boolean compact )
+	{
+		String labelStr = "N/A";
+		String compactStr = "N/A";
+		switch ( status )
+		{
+			case -1:
+				labelStr = "Up (Sharing)";
+				compactStr = "Up (S)";
+				break;
+				
+			case -2:
+				labelStr = "Down (Sharing)";
+				compactStr = "Dn (S)";
+				break;
+			
+			case 0:
+				labelStr = "Up";
+				compactStr = "Up";
+				break;
+				
+			default:
+				labelStr = "Down";
+				compactStr = "Down";
+				break;
+		}
+		
+		if ( compact == true )
+		{
+			return compactStr;
+		}
+		else
+		{
+		    return labelStr;
+		}
+	}
+	
+	// ====================================================================	//
+	// String padOrTruncate( String, int, char ) [static, private]
+	// ====================================================================	//
+	
+	public static String padOrTruncate(String str, int size, char padChar)
+	{
+	  if ( str.length() > size)
+	  {
+	      return str.substring(0,size);
+	  }
+	  
+	  StringBuffer padded = new StringBuffer(str);
+	  while (padded.length() < size)
+	  {
+	      padded.append(padChar);
+	  }
+	  return padded.toString();
+	}
+	
+	// ==================================================================== //
+	// void writeStatusFile( void ) [static, private]
+	// ==================================================================== //
+	// Write server status file
+
+	public static void writeStatusFile()
+	{
+	    if ( statusFile != true ) return;
+	    
+		try
+		{
+			FileWriter statusFileWriter = new FileWriter(defaultStatusFile, false);
+			if (statusCompact == true)
+			{
+				statusFileWriter.write("##########################################################\r\n");
+				statusFileWriter
+				        .write("## NPDS Server Status - Updated " + mGMTCompactFormatter.format(new Date()) + "\r\n");
+				statusFileWriter.write("##########################################################\r\n");
+				statusFileWriter.write("| Status | Server                                         \r\n");
+				statusFileWriter.write("----------------------------------------------------------\r\n");
+			}
+			else
+			{
+				statusFileWriter.write(
+				        "###########################################################################################################\r\n");
+				statusFileWriter.write("## NPDS Server Status - Last Update " + ReturnRFCTime(new Date()) + "\r\n");
+				statusFileWriter.write(
+				        "###########################################################################################################\r\n");
+				statusFileWriter.write(
+				        "| Status         | Server                                             | Last Verified\r\n");
+				statusFileWriter.write(
+				        "-----------------------------------------------------------------------------------------------------------\r\n");
+			}
+
+			synchronized (mHostInfoVector)
+			{
+				for (int foo = 0; foo < mHostInfoVector.size(); foo++)
+				{
+					THostInfo theInfo = (THostInfo) mHostInfoVector.elementAt(foo);
+					if (statusCompact == true)
+					{
+						statusFileWriter.write("| " + padOrTruncate(getStatusString(theInfo.mStatus, true), 7, ' ')
+						        + "| " + theInfo.mDesc + "\r\n");
+					}
+					else
+					{
+						statusFileWriter.write("| " + padOrTruncate(getStatusString(theInfo.mStatus, false), 15, ' ')
+						        + "| " + padOrTruncate(theInfo.mDesc, 50, ' ') + " | " + theInfo.mLastValidation
+						        + "\r\n");
+					}
+				}
+
+				if (statusCompact == true)
+				{
+					statusFileWriter.write("----------------------------------------------------------\r\n");
+				}
+				else
+				{
+					statusFileWriter.write(
+					        "-----------------------------------------------------------------------------------------------------------\r\n");
+				}
+
+			} // synchronized ( mHostInfoVector )
+
+			statusFileWriter.flush();
+			statusFileWriter.close();
+		}
+		catch (IOException e)
+		{
+			System.out.println("   [FATAL] Can't write to status file: " + defaultStatusFile);
+		}
+	}
+	
 	// ====================================================================	//
 	// void saveServers( void ) [static, private]
 	// ====================================================================	//
@@ -1793,7 +1972,7 @@ public class npdstracker
 			outcmdfile.flush();
 			outcmdfile.close();
 		} catch (IOException e) {
-			System.out.println("   [FATAL] Can't write to log file: " + cmdfile);
+			System.out.println("   [FATAL] Can't write to server file: " + cmdfile);
 		}
 	}
 }
@@ -1805,3 +1984,4 @@ public class npdstracker
 //             Jean-Louis Gassee, 24 May 2000       //
 //                                                  //
 // ================================================	//
+
